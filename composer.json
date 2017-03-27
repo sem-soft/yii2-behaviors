@@ -1,0 +1,21 @@
+{
+    "name": "sem-soft/yii2-behaviors",
+    "description": "Set of additional behaviors and filters for Yii2 Framework",
+    "license": "BSD 3-Clause",
+    "type": "yii2-behaviors",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "authors": [
+        {
+            "name": "Samsonov Vladimir",
+            "email": "samsonov.sem@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "sem\\filters\\": "",
+            "sem\\behaviors\\": ""
+        }
+    }
+}
