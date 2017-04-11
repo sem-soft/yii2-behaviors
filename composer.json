@@ -14,8 +14,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "sem\\filters\\": "",
-            "sem\\behaviors\\": ""
+            "sem\\filters\\": "filters/",
+            "sem\\behaviors\\": "behaviors/"
         }
     }
 }
