@@ -1,11 +1,9 @@
 <?php
-
 /**
  * @author Самсонов Владимир <samsonov.sem@gmail.com>
  * @copyright Copyright &copy; S.E.M. 2017-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-
 namespace sem\behaviors;
 
 use yii\base\Behavior;
@@ -33,9 +31,9 @@ class TrimmerBehavior extends Behavior
      */
     public function setCharacterMask($symbols2trim)
     {
-	if ($symbols2trim) {
-	    $this->_characterMask = $symbols2trim;
-	}
+        if ($symbols2trim) {
+            $this->_characterMask = $symbols2trim;
+        }
     }
 
     /**
@@ -45,9 +43,9 @@ class TrimmerBehavior extends Behavior
      */
     public function setAttributes($attributes2trim)
     {
-	if (!is_array($attributes2trim) || empty($attributes2trim))
-	    throw new \yii\base\InvalidConfigException("Наименования атрибутов для тримминга должны быть заданы!");
-	$this->_attributes = $attributes2trim;
+        if (!is_array($attributes2trim) || empty($attributes2trim))
+            throw new \yii\base\InvalidConfigException("Наименования атрибутов для тримминга должны быть заданы!");
+        $this->_attributes = $attributes2trim;
     }
 
     /**
@@ -55,9 +53,9 @@ class TrimmerBehavior extends Behavior
      */
     public function events()
     {
-	return [
-	    BaseActiveRecord::EVENT_BEFORE_VALIDATE => 'trimAttrs'
-	];
+        return [
+            BaseActiveRecord::EVENT_BEFORE_VALIDATE => 'trimAttrs'
+        ];
     }
 
     /**
@@ -67,9 +65,8 @@ class TrimmerBehavior extends Behavior
      */
     public function trimAttrs($event)
     {
-	foreach ($this->_attributes as $attribute) {
-	    $this->owner->$attribute = trim($this->owner->$attribute, $this->_characterMask);
-	}
+        foreach ($this->_attributes as $attribute) {
+            $this->owner->$attribute = trim($this->owner->$attribute, $this->_characterMask);
+        }
     }
-
 }

@@ -4,7 +4,6 @@
  * @copyright Copyright &copy; S.E.M. 2017-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-
 namespace sem\filters;
 
 use Yii;
@@ -35,9 +34,9 @@ class AjaxFilter extends Behavior
      */
     public function events()
     {
-	return [
-	    Controller::EVENT_BEFORE_ACTION => 'beforeAction'
-	];
+        return [
+            Controller::EVENT_BEFORE_ACTION => 'beforeAction'
+        ];
     }
 
     /**
@@ -48,12 +47,11 @@ class AjaxFilter extends Behavior
      */
     public function beforeAction($event)
     {
-	$action = $event->action->id;
-	if (in_array($action, $this->actions) && !Yii::$app->request->isAjax) {
-	    $event->isValid = false;
-	    throw new BadRequestHttpException($this->message);
-	}
-	return $event->isValid;
+        $action = $event->action->id;
+        if (in_array($action, $this->actions) && !Yii::$app->request->isAjax) {
+            $event->isValid = false;
+            throw new BadRequestHttpException($this->message);
+        }
+        return $event->isValid;
     }
-
 }

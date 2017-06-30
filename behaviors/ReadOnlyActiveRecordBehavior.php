@@ -4,7 +4,6 @@
  * @copyright Copyright &copy; S.E.M. 2017-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
-
 namespace sem\behaviors;
 
 use yii\base\Behavior;
@@ -21,11 +20,11 @@ class ReadOnlyActiveRecordBehavior extends Behavior
      */
     public function events()
     {
-	return [
-	    ActiveRecord::EVENT_BEFORE_INSERT => 'denyAll',
-	    ActiveRecord::EVENT_BEFORE_UPDATE => 'denyAll',
-	    ActiveRecord::EVENT_BEFORE_DELETE => 'denyAll'
-	];
+        return [
+            ActiveRecord::EVENT_BEFORE_INSERT => 'denyAll',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'denyAll',
+            ActiveRecord::EVENT_BEFORE_DELETE => 'denyAll'
+        ];
     }
 
     /**
@@ -34,7 +33,6 @@ class ReadOnlyActiveRecordBehavior extends Behavior
      */
     public function denyAll($event)
     {
-	$event->isValid = false;
+        $event->isValid = false;
     }
-
 }
