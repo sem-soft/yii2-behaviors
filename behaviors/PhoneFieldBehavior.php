@@ -4,11 +4,12 @@
  * @copyright Copyright &copy; S.E.M. 2018-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
+
 namespace sem\behaviors;
 
 
 use yii\base\Behavior;
-use yii\db\ActiveRecord;
+use yii\base\Model;
 
 /**
  * Поведение производит валидацию и очистку номеров телефонов
@@ -38,9 +39,9 @@ class PhoneFieldBehavior extends Behavior
     public $message;
 
     /**
-     * @var bool сохранять номера телефона в чистом виде без символов форматирования
+     * @var array список событий, при которых необходимо очищать телефоны от знаков форматирования
      */
-    public $saveClear = true;
+    public $clearFormatOn = [];
 
     /**
      * @inheritdoc
@@ -51,15 +52,26 @@ class PhoneFieldBehavior extends Behavior
         if ($this->message === null) {
             $this->message = 'Номер телефона должен состоять из цифр и символов форматирования: "(", ")", "-", "+"';
         }
+
+        if (!is_array($this->clearFormatOn)) {
+            throw new \yii\base\InvalidConfigException("Список событий должен быть массивом");
+        }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function events()
     {
-        return [
-            ActiveRecord::EVENT_BEFORE_VALIDATE => 'beforeValidate',
-            ActiveRecord::EVENT_BEFORE_INSERT => 'beforeSave',
-            ActiveRecord::EVENT_AFTER_UPDATE => 'beforeSave'
+        $events = [
+            Model::EVENT_BEFORE_VALIDATE => 'validatePhone',
         ];
+
+        foreach ($this->clearFormatOn as $event) {
+            $events[$event] = 'clearFormat';
+        }
+
+        return $events;
     }
 
     /**
@@ -74,7 +86,7 @@ class PhoneFieldBehavior extends Behavior
     /**
      * Производит валидацию номерателефона
      */
-    public function beforeValidate()
+    public function validatePhone()
     {
         /** @var ActiveRecord $model */
         $model = $this->owner;
@@ -90,16 +102,13 @@ class PhoneFieldBehavior extends Behavior
     /**
      * Если установлен флаг @see $saveClear, то производит очистку телефона от символов форматирования перед сохранением
      */
-    public function beforeSave()
+    public function clearFormat()
     {
+        /** @var ActiveRecord $model */
+        $model = $this->owner;
 
-        if ($this->saveClear) {
-            /** @var ActiveRecord $model */
-            $model = $this->owner;
-
-            foreach ($this->attributes as $attribute) {
-                $model->$attribute = preg_replace("/[$this->formatSymbolsPattern]/", '', $model->$attribute);
-            }
+        foreach ($this->attributes as $attribute) {
+            $model->$attribute = preg_replace("/[$this->formatSymbolsPattern]/", '', $model->$attribute);
         }
 
     }
